@@ -15,9 +15,7 @@ export default function pokemon({ pokemon }) {
   const [search, setSearch] = useState("");
 
   const getPokemon = useMemo(() => {
-    if (allPokemon.length !== 0) {
-      if (!search) return allPokemon;
-    }
+    if (!search) return allPokemon;
     return allPokemon.filter((item) => {
       return item.name.includes(search);
     });
@@ -26,12 +24,13 @@ export default function pokemon({ pokemon }) {
   useEffect(() => {
     const data = () => {
       pokemon.map((data, i) => {
-        setAllPokemon((prevState) => [
-          ...prevState,
+        return setAllPokemon((state) => [
+          ...state,
           { id: i + 1, name: data.name },
         ]);
       });
     };
+    console.log("added to new array!");
     setIsLoading(false);
     return () => data();
   }, []);
