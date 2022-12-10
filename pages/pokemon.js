@@ -28,10 +28,12 @@ export default function pokemon({ pokemon }) {
           ...prevState,
           { id: i + 1, name: data.name },
         ]);
+        setIsLoading(false);
       });
-      setIsLoading(false);
     };
   }, []);
+
+  console.log(getPokemon);
 
   return (
     <Layouts>

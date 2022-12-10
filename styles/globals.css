@@ -17,3 +17,8 @@
     @apply bg-th-dark text-th-white;
   }
 }
+
+#nprogress {
+  position: relative;
+  z-index: 9999999;
+}
