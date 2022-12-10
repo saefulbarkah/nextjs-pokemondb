@@ -19,7 +19,7 @@ export default function pokemon({ pokemon }) {
     return allPokemon.filter((item) => {
       return item.name.includes(search);
     });
-  }, [allPokemon, search]);
+  }, [allPokemon, pokemon, search]);
 
   useEffect(() => {
     const data = () => {
