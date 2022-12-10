@@ -15,22 +15,25 @@ export default function pokemon({ pokemon }) {
   const [search, setSearch] = useState("");
 
   const getPokemon = useMemo(() => {
-    if (!search) return allPokemon;
+    if (allPokemon.length !== 0) {
+      if (!search) return allPokemon;
+    }
     return allPokemon.filter((item) => {
       return item.name.includes(search);
     });
   }, [allPokemon, search]);
 
   useEffect(() => {
-    return () => {
+    const data = () => {
       pokemon.map((data, i) => {
         setAllPokemon((prevState) => [
           ...prevState,
           { id: i + 1, name: data.name },
         ]);
-        setIsLoading(false);
       });
     };
+    setIsLoading(false);
+    return () => data();
   }, []);
 
   console.log(getPokemon);
