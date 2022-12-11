@@ -5,7 +5,6 @@ import Layouts from "../components/Layouts";
 import Title from "../components/Title";
 
 export default function Custom404() {
-  const router = useRouter();
   return (
     <>
       <Title name="Page Not Found 404" />
