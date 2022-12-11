@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import Layouts from "../components/Layouts";
 import Title from "../components/Title";
 
