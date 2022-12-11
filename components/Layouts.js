@@ -8,7 +8,7 @@ const Layouts = ({ children, className }) => {
     <SidebarProvider>
       <SideBar />
       <div
-        className={`md:ml-[330px] mt-[80px] md:mt-[30px] md:mr-[30px] mx-[30px] ${className}`}
+        className={`md:ml-[330px] mt-[80px] md:my-[30px] md:mr-[30px] mx-[30px] ${className}`}
       >
         {children}
       </div>

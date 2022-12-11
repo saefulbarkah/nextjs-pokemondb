@@ -11,9 +11,14 @@ import CardLoading from "../components/CardLoading";
 
 export default function pokemon({ pokemon }) {
   const [search, setSearch] = useState("");
-
+  const [isLoading, setIsLoading] = useState(true);
   const getPokemon = useMemo(() => {
-    if (!search) return pokemon;
+    if (!search) {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
+      return pokemon;
+    }
     return pokemon.filter((item) => {
       return item.name.includes(search);
     });
@@ -53,7 +58,13 @@ export default function pokemon({ pokemon }) {
             />
           </div>
         </div>
-        {getPokemon.length !== 0 ? (
+        {isLoading ? (
+          <div
+            className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-5 items-stretch`}
+          >
+            <CardLoading count={12} />
+          </div>
+        ) : getPokemon.length !== 0 ? (
           <div
             className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-5 items-stretch`}
           >

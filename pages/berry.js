@@ -11,11 +11,13 @@ import TitlePage from "../components/TitlePage";
 import Title from "../components/Title";
 
 function ListBerries({ berries }) {
-  const [isLoading, setIsLoading] = useState(true);
   const [searchBerry, setSearchBerry] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const getBerries = useMemo(() => {
     if (!searchBerry) {
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
       return berries;
     }
     return berries.filter((item) => {
@@ -53,7 +55,7 @@ function ListBerries({ berries }) {
               key={i}
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${data.name}-berry.png`}
               name={data.name}
-              url={data.name}
+              url={`/berry/${data.name}`}
             />
           ))}
         </div>
