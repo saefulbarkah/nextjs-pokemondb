@@ -38,9 +38,7 @@ function AvatarPokemon({ pokemon }) {
   );
 }
 
-function InfoPokemon({ pokemon }) {
-  const [type, setType] = useState([]);
-  const [stat, setStat] = useState([]);
+function InfoPokemon({ pokemon, types, stats }) {
   const elementColor = [
     { element: "fire", color: "bg-red-600" },
     { element: "grass", color: "bg-green-600" },
@@ -59,12 +57,6 @@ function InfoPokemon({ pokemon }) {
     { element: "rock", color: "bg-orange-900" },
     { element: "steel", color: "bg-lime-700" },
   ];
-  useEffect(() => {
-    return () => {
-      setType(pokemon.types);
-      setStat(pokemon.stats);
-    };
-  }, []);
   return (
     <section>
       <div className="mt-[5rem]">
@@ -99,7 +91,7 @@ function InfoPokemon({ pokemon }) {
                   <p className="font-light text-sm">Type</p>
                   <div className="grid grid-cols-3 md:grid-cols-2 gap-2 text-center items-stretch">
                     {elementColor.map((data, key) =>
-                      type.map((i) =>
+                      types.map((i) =>
                         data.element === i["type"].name ? (
                           <p
                             className={`rounded-lg capitalize ${
@@ -137,7 +129,7 @@ function InfoPokemon({ pokemon }) {
                     Base Stats
                   </p>
                 </div>
-                {stat.map((item, key) => (
+                {stats.map((item, key) => (
                   <div
                     className="flex flex-col text-lg leading-3 my-2"
                     key={key}
@@ -157,31 +149,7 @@ function InfoPokemon({ pokemon }) {
   );
 }
 
-function AbilityPokemon({ pokemon }) {
-  const [abilityEffect, setAbilityEffect] = useState([]);
-  const [ability, setAbility] = useState([]);
-  useEffect(() => {
-    return () => {
-      setAbility(pokemon.abilities);
-    };
-  }, []);
-  useEffect(() => {
-    const showAbilities = async (abilityName) => {
-      try {
-        const response = await fetch(
-          `https://pokeapi.co/api/v2/ability/${abilityName}`
-        );
-        const data = await response.json();
-        setAbilityEffect((state) => [...state, data]);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    ability.forEach((element) => {
-      showAbilities(element["ability"].name);
-    });
-    // eslint-disable-next-line
-  }, [ability]);
+function AbilityPokemon({ ability, abilityEffect }) {
   return (
     <section className="h-full">
       <Border />
@@ -232,7 +200,7 @@ function AbilityPokemon({ pokemon }) {
   );
 }
 
-export default function showPokemon({ pokemon }) {
+export default function showPokemon({ pokemon, ability }) {
   return (
     <>
       <Title name={`Pokemon Database | ${pokemon.name}`} />
@@ -243,10 +211,18 @@ export default function showPokemon({ pokemon }) {
         <AvatarPokemon pokemon={pokemon} />
 
         {/* Pokemon information */}
-        <InfoPokemon pokemon={pokemon} />
+        <InfoPokemon
+          pokemon={pokemon}
+          types={pokemon.types}
+          stats={pokemon.stats}
+        />
 
         {/* ability */}
-        <AbilityPokemon pokemon={pokemon} />
+        <AbilityPokemon
+          pokemon={pokemon}
+          abilityEffect={ability}
+          ability={pokemon.abilities}
+        />
         <BackPage url="/pokemon" title="All Pokemon" />
       </Layouts>
     </>
@@ -254,12 +230,23 @@ export default function showPokemon({ pokemon }) {
 }
 
 export async function getServerSideProps(context) {
+  // get params
   const name = context.params.name;
-  const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
-  const data = await response.json();
+  // response
+  const poke = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+  // results
+  const dataPokemon = await poke.json();
+  // get ability
+  const abilities = dataPokemon.abilities.map(async (item) => {
+    const resAbilities = await fetch(
+      `https://pokeapi.co/api/v2/ability/${item["ability"].name}`
+    );
+    return resAbilities.json();
+  });
   return {
     props: {
-      pokemon: data,
+      pokemon: dataPokemon,
+      ability: await Promise.all(abilities),
     },
   };
 }

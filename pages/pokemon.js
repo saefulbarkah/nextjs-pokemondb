@@ -10,30 +10,14 @@ import Layouts from "../components/Layouts";
 import CardLoading from "../components/CardLoading";
 
 export default function pokemon({ pokemon }) {
-  const [allPokemon, setAllPokemon] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
 
   const getPokemon = useMemo(() => {
-    if (!search) return allPokemon;
-    return allPokemon.filter((item) => {
+    if (!search) return pokemon;
+    return pokemon.filter((item) => {
       return item.name.includes(search);
     });
-  }, [allPokemon, pokemon, search]);
-
-  useEffect(() => {
-    const data = () => {
-      pokemon.map((data, i) => {
-        return setAllPokemon((state) => [
-          ...state,
-          { id: i + 1, name: data.name },
-        ]);
-      });
-    };
-    console.log("added to new array!");
-    setIsLoading(false);
-    return () => data();
-  }, []);
+  }, [pokemon, search]);
 
   console.log(getPokemon);
 
@@ -54,7 +38,6 @@ export default function pokemon({ pokemon }) {
           unknown. One of their main features is that they can be caught using a
           Poké Ball, which allows them to be carried around.
         </Paragraph>
-
         <div className="mt-[5rem]">
           <div className="xs:flex-col md:flex md:gap-5 md:justify-between items-center">
             <div className="flex-1">
@@ -70,14 +53,7 @@ export default function pokemon({ pokemon }) {
             />
           </div>
         </div>
-
-        {isLoading ? (
-          <div
-            className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-5 items-stretch`}
-          >
-            <CardLoading count={12} />
-          </div>
-        ) : getPokemon.length !== 0 ? (
+        {getPokemon.length !== 0 ? (
           <div
             className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-5 items-stretch`}
           >
@@ -104,9 +80,13 @@ export default function pokemon({ pokemon }) {
 export async function getServerSideProps() {
   const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=50`);
   const data = await response.json();
+  let newData = [];
+  data.results.map((item, i) => {
+    newData = [...newData, { name: item.name, id: i + 1 }];
+  });
   return {
     props: {
-      pokemon: data.results,
+      pokemon: newData,
     },
   };
 }
