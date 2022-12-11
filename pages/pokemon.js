@@ -9,7 +9,7 @@ import Title from "../components/Title";
 import Layouts from "../components/Layouts";
 import CardLoading from "../components/CardLoading";
 
-export default function pokemon({ pokemon }) {
+export default function pokemon({ pokemon, idPokemon }) {
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const getPokemon = useMemo(() => {
@@ -24,14 +24,16 @@ export default function pokemon({ pokemon }) {
     });
   }, [pokemon, search]);
 
-  console.log(getPokemon);
-
   return (
     <Layouts>
       <Title name="Pokemon Database | Pokemon" />
       <section>
         <BgDecoration
-          path={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/2.svg`}
+          path={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${
+            getPokemon.length === 1
+              ? getPokemon.map((item) => item.id)
+              : idPokemon
+          }.svg`}
         />
         <div className="mt-5">
           <TitlePage>Pokemon</TitlePage>
@@ -95,9 +97,12 @@ export async function getServerSideProps() {
   data.results.map((item, i) => {
     newData = [...newData, { name: item.name, id: i + 1 }];
   });
+  const randomID = Math.floor(Math.random() * newData.length) + 1;
+
   return {
     props: {
       pokemon: newData,
+      idPokemon: randomID,
     },
   };
 }
