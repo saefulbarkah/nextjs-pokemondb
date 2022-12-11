@@ -219,7 +219,7 @@ export async function getServerSideProps(context) {
   const poke = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
   const dataPokemon = await poke.json();
   // element
-  const resElement = await fetch(`http://localhost:3000/api/element`);
+  const resElement = await fetch(`${process.env.BASE_URL}/api/element`);
   const dataElement = await resElement.json();
   // get ability
   const abilities = dataPokemon.abilities.map(async (item) => {
