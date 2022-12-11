@@ -38,25 +38,7 @@ function AvatarPokemon({ pokemon }) {
   );
 }
 
-function InfoPokemon({ pokemon, types, stats }) {
-  const elementColor = [
-    { element: "fire", color: "bg-red-600" },
-    { element: "grass", color: "bg-green-600" },
-    { element: "poison", color: "bg-purple-800" },
-    { element: "electric", color: "bg-yellow-600" },
-    { element: "fairy", color: "bg-pink-700" },
-    { element: "water", color: "bg-blue-700" },
-    { element: "ice", color: "bg-sky-500" },
-    { element: "fighting", color: "bg-orange-700" },
-    { element: "flying", color: "bg-gray-500" },
-    { element: "bug", color: "bg-green-800" },
-    { element: "dark", color: "bg-slate-800" },
-    { element: "normal", color: "bg-purple-500" },
-    { element: "ghost", color: "bg-blue-700" },
-    { element: "ground", color: "bg-orange-700" },
-    { element: "rock", color: "bg-orange-900" },
-    { element: "steel", color: "bg-lime-700" },
-  ];
+function InfoPokemon({ pokemon, types, stats, elementColor }) {
   return (
     <section>
       <div className="mt-[5rem]">
@@ -200,7 +182,7 @@ function AbilityPokemon({ ability, abilityEffect }) {
   );
 }
 
-export default function showPokemon({ pokemon, ability }) {
+export default function showPokemon({ pokemon, ability, elementColor }) {
   return (
     <>
       <Title name={`Pokemon Database | ${pokemon.name}`} />
@@ -215,6 +197,7 @@ export default function showPokemon({ pokemon, ability }) {
           pokemon={pokemon}
           types={pokemon.types}
           stats={pokemon.stats}
+          elementColor={elementColor}
         />
 
         {/* ability */}
@@ -232,10 +215,12 @@ export default function showPokemon({ pokemon, ability }) {
 export async function getServerSideProps(context) {
   // get params
   const name = context.params.name;
-  // response
+  // pokemon
   const poke = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
-  // results
   const dataPokemon = await poke.json();
+  // element
+  const resElement = await fetch(`http://localhost:3000/api/element`);
+  const dataElement = await resElement.json();
   // get ability
   const abilities = dataPokemon.abilities.map(async (item) => {
     const resAbilities = await fetch(
@@ -247,6 +232,7 @@ export async function getServerSideProps(context) {
     props: {
       pokemon: dataPokemon,
       ability: await Promise.all(abilities),
+      elementColor: dataElement,
     },
   };
 }
