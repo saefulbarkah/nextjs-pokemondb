@@ -13,6 +13,7 @@ const Search = (props) => {
 			focus:ring focus:ring-th-red transition-all"
         name="name_pokemon"
         placeholder={props.placeHolder}
+        spellCheck="false"
         id=""
         onChange={props.onChange}
       />
