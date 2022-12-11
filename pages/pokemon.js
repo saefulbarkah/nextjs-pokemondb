@@ -20,7 +20,7 @@ export default function pokemon({ pokemon, idPokemon }) {
       return pokemon;
     }
     return pokemon.filter((item) => {
-      return item.name.includes(search);
+      return item.name.includes(search.toLowerCase());
     });
   }, [pokemon, search]);
 
