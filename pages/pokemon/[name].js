@@ -25,7 +25,7 @@ function AvatarPokemon({ pokemon }) {
             src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${pokemon.id}.svg`}
             height={90}
             width={90}
-            priority
+            priority="true"
             className="rounded-full object-cover h-[90px] w-[90px] bg-center"
             alt=""
           />
@@ -99,7 +99,7 @@ function InfoPokemon({ pokemon, types, stats, elementColor }) {
                     sizes="(max-width: 768px) 100vw,
                     (max-width: 1200px) 50vw,
                     33vw"
-                    priority
+                    priority="true"
                     alt=""
                   />
                 </div>

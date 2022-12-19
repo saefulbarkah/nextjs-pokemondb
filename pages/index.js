@@ -15,7 +15,7 @@ export default function index() {
             alt=""
             width={400}
             height={400}
-            priority
+            priority="true"
             className="w-[400px] md:w-[700px] select-none pointer-events-none"
           />
         </div>

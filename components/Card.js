@@ -10,7 +10,13 @@ const Card = (props) => {
     >
       <div className="flex flex-col items-center">
         <div className="w-full flex justify-center h-[75px]">
-          <Image src={props.src} alt="" width={75} height={75} priority />
+          <Image
+            src={props.src}
+            alt=""
+            width={75}
+            height={75}
+            priority="true"
+          />
         </div>
         <h4 className="font-bold capitalize mt-3 text-lg">{props.name}</h4>
       </div>
