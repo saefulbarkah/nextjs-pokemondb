@@ -9,16 +9,51 @@ import Title from "../components/Title";
 import Layouts from "../components/Layouts";
 import CardLoading from "../components/CardLoading";
 
-export default function pokemon({ pokemon, idPokemon }) {
+export default function pokemon() {
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const getPokemon = useMemo(() => {
-    if (!search) {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 500);
-      return pokemon;
+  const [pokemon, setPokemon] = useState([]);
+  const [randomID, setRandomID] = useState();
+
+  const newDataPokemon = (obj) => {
+    let data = [];
+    obj.map((item, i) => {
+      data = [
+        ...data,
+        {
+          id: i + 1,
+          name: item.name,
+        },
+      ];
+    });
+    setPokemon(data);
+  };
+
+  const randomNumber = (value) => {
+    return Math.floor(Math.random() * value);
+  };
+
+  const fetchPokemon = async () => {
+    try {
+      const response = await fetch(
+        "https://pokeapi.co/api/v2/pokemon?limit=50"
+      );
+      const data = await response.json();
+      console.log(data.results);
+      newDataPokemon(data.results);
+      setRandomID(randomNumber(data.results.length + 1));
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
     }
+  };
+
+  useEffect(() => {
+    fetchPokemon();
+  }, []);
+
+  const getPokemon = useMemo(() => {
+    if (!search) return pokemon;
     return pokemon.filter((item) => {
       return item.name.includes(search.toLowerCase());
     });
@@ -27,12 +62,13 @@ export default function pokemon({ pokemon, idPokemon }) {
   return (
     <Layouts>
       <Title name="Pokemon Database | Pokemon" />
+
       <section>
         <BgDecoration
           path={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${
             getPokemon.length === 1
               ? getPokemon.map((item) => item.id)
-              : idPokemon
+              : randomID
           }.svg`}
         />
         <div className="mt-5">
@@ -88,21 +124,4 @@ export default function pokemon({ pokemon, idPokemon }) {
       </section>
     </Layouts>
   );
-}
-
-export async function getServerSideProps() {
-  const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=50`);
-  const data = await response.json();
-  let newData = [];
-  data.results.map((item, i) => {
-    newData = [...newData, { name: item.name, id: i + 1 }];
-  });
-  const randomID = Math.floor(Math.random() * newData.length) + 1;
-
-  return {
-    props: {
-      pokemon: newData,
-      idPokemon: randomID,
-    },
-  };
 }

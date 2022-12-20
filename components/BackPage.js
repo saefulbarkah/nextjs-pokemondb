@@ -4,7 +4,7 @@ import { BsFillCaretLeftFill } from "react-icons/bs";
 
 const BackPage = (props) => {
   return (
-    <section className="my-5 flex items-center">
+    <section className={`my-5 flex items-center ${props.className}`}>
       <Link
         className="transition-all py-2 text-th-blue border-b-2 border-transparent hover:border-th-blue flex gap-1 items-center"
         href={props.url}

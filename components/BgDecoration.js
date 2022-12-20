@@ -3,14 +3,14 @@ import React from "react";
 
 const BgDecoration = (props) => {
   return (
-    <div className="fixed opacity-10 md:left-[60%] left-[2%] bottom-[25%] md:bottom-[25%] -z-[50] select-none md:h-[450px]">
+    <div className="fixed opacity-10 md:-right-[250px] -right-[0px] md:-bottom-[100px] -bottom-[200px] -z-[50] select-none md:w-[80vw] h-full w-[100vw]">
       <Image
         src={props.path}
         alt=""
-        width={400}
-        height={400}
-        priority={true}
-        className="w-[400px] md:w-[700px] select-none pointer-events-none"
+        objectFit="contain"
+        fill
+        priority={props.priority}
+        className="select-none pointer-events-none"
       />
     </div>
   );
