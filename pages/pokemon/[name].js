@@ -60,7 +60,23 @@ function AvatarPokemon({ pokemon, loading }) {
   );
 }
 
-function InfoPokemon({ pokemon, types, stats, elementColor, loading }) {
+function InfoPokemon({ pokemon, types, stats, loading }) {
+  const [element, setElement] = useState([]);
+  const fetchElement = async () => {
+    try {
+      const url = process.env.BASE_URL;
+      const response = await fetch(`${url}/api/element`);
+      const data = await response.json();
+      setElement(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    if (!loading) {
+      fetchElement();
+    }
+  }, [loading]);
   return (
     <>
       {loading ? (
@@ -169,7 +185,7 @@ function InfoPokemon({ pokemon, types, stats, elementColor, loading }) {
                       <div className="flex flex-col text-lg my-2 gap-2">
                         <p className="font-light text-sm">Type</p>
                         <div className="grid grid-cols-3 md:grid-cols-2 gap-2 text-center items-stretch">
-                          {elementColor.map((data, key) =>
+                          {element.map((data, key) =>
                             types.map((i) =>
                               data.element === i["type"].name ? (
                                 <p
@@ -332,20 +348,9 @@ export default function showPokemon() {
     }
   };
 
-  const fetchElement = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/api/element");
-      const data = await response.json();
-      setElementColor(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     if (!isReady) return console.log("fetching.....");
     fetchPokemon();
-    fetchElement();
   }, [isReady]);
   return (
     <>
@@ -361,7 +366,6 @@ export default function showPokemon() {
           pokemon={pokemon}
           types={pokemon.types}
           stats={pokemon.stats}
-          elementColor={elementColor}
           loading={loading}
         />
 
