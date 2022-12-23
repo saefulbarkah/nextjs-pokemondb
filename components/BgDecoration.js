@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "next/legacy/image";
 import React from "react";
 
 const BgDecoration = (props) => {
@@ -8,8 +8,9 @@ const BgDecoration = (props) => {
         src={props.path}
         alt=""
         objectFit="contain"
-        fill
-        priority={props.priority}
+        layout="fill"
+        quality={1}
+        priority
         className="select-none pointer-events-none"
       />
     </div>

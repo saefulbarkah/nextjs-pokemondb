@@ -5,7 +5,7 @@ import TitlePage from "../components/TitlePage";
 export default function berry() {
   return (
     <Layouts>
-      <TitlePage>WELCOME</TitlePage>
+      <TitlePage>Coming soon...</TitlePage>
     </Layouts>
   );
 }

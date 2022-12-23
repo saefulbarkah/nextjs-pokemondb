@@ -39,7 +39,6 @@ export default function pokemon() {
         "https://pokeapi.co/api/v2/pokemon?limit=50"
       );
       const data = await response.json();
-      console.log(data.results);
       newDataPokemon(data.results);
       setRandomID(randomNumber(data.results.length + 1));
       setIsLoading(false);
